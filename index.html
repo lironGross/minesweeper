@@ -9,22 +9,28 @@
     <title>Document</title>
 </head>
 
-<body onload="init()">
-    
-    <h1>Mine Sweeper</h1>
-    <div class = level> Choose board size: <br>
-     <button data-level="16" class="buttons" onclick="chooseLevel(this)"> Beginner</button>
-     <button data-level="64" class="buttons" onclick="chooseLevel(this)"> Medium </button>
-     <button data-level="144" class="buttons" onclick="chooseLevel(this)"> Expert </button>
+<body class="body" onload="init()">
+    <div>
+        <h1>Mine Sweeper</h1>
+        <div class=level> Choose board size: <br>
+           
+            <button data-level="16" class="buttons" onclick="chooseLevel(this)"> Beginner</button>
+            <button data-level="64" class="buttons" onclick="chooseLevel(this)"> Medium </button>
+            <button data-level="144" class="buttons" onclick="chooseLevel(this)"> Expert </button>
+        </div>
+        <div class="table">
+            <table id="right-click">
+                <tbody class="board"></tbody>
+            </table>
+
+            <h1 class="over">GAME OVER 💣</h1>
+            <p id="timer"></p> 
+        </div>
+
+
+        <script src="js/utils.js"></script>
+        <script src="js/js.js"></script>
     </div>
-
-    <table>
-        <tbody class="board"></tbody>
-    </table>
-
-    <script src="js/utils.js"></script>
-    <script src="js/js.js"></script>
-    
 </body>
 
 </html>

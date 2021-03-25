@@ -21,3 +21,18 @@ function getRandomInt(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
 }
+
+
+// var rightMouseClicked = false;
+
+// function handleMouseDown(e) {
+//   //e.button describes the mouse button that was clicked
+//   // 0 is left, 1 is middle, 2 is right
+//   if (e.button === 2) {
+//       console.log('rightMouseClicked');
+
+ 
+//   }
+// }
+
+// document.addEventListener('mousedown', handleMouseDown);
