@@ -9,25 +9,30 @@
     <title>Document</title>
 </head>
 
-<body class="body" onload="init()">
+<body onload="init()">
     <div>
-        <h1>Mine Sweeper</h1>
-        <div class=level> Choose board size: <br>
+        <h1 class="smiley">Mine Sweeper<span> </span></h1>
+        <h3>Choose board size:</h3>
+        <div class="level">  <br>
            
             <button data-level="16" class="buttons" onclick="chooseLevel(this)"> Beginner</button>
             <button data-level="64" class="buttons" onclick="chooseLevel(this)"> Medium </button>
             <button data-level="144" class="buttons" onclick="chooseLevel(this)"> Expert </button>
         </div>
-        <div class="table">
-            <table id="right-click">
+            <table>
+                <div oncontextmenu="myFunction()" contextmenu="mymenu">
                 <tbody class="board"></tbody>
-            </table>
+                <menu type="context" id="mymenu">
+                    <menuitem label="Refresh" onclick="window.location.reload();" icon="ico_reload.png"></menuitem>
+                </table>
+                
+                <h1 class="result"><span> </span></h1>
 
-            <h1 class="over">GAME OVER 💣</h1>
+             
             <p id="timer"></p> 
-        </div>
-
-
+    
+       
+            
         <script src="js/utils.js"></script>
         <script src="js/js.js"></script>
     </div>
