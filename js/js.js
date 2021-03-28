@@ -1,7 +1,7 @@
 'use strict'
 const SMILEY = '😃';
 const SAD = '😌';
-const WINNER = '👑';
+const WINNER = '🥳';
 const FLAG = '🚩';
 const BOMB = '💣';
 
@@ -9,6 +9,8 @@ var gBoard;
 var gMinesCells = [];
 var gTimer;
 var totalSeconds = 0;
+var gSmiley = document.querySelector('h1.smiley span');
+var gElBtn = document.querySelectorAll('.board td');
 
 var gLevel = {
     SIZE: 4,
@@ -26,8 +28,7 @@ var gGame = {
 function init() {
     gBoard = buildBoard();
     console.log('gBoard', gBoard);
-    renderBoard()
-
+    renderBoard();
 }
 
 function chooseLevel(elBtn) {
@@ -35,6 +36,7 @@ function chooseLevel(elBtn) {
     if (level === '16') {
         gLevel.SIZE = 4;
         gLevel.MINES = 2;
+        
     }
     if (level === '64') {
         gLevel.SIZE = 8;
@@ -43,11 +45,17 @@ function chooseLevel(elBtn) {
     if (level === '144') {
         gLevel.SIZE = 12;
         gLevel.MINES = 30;
+
     }
-    gMinesCells= [];
+    gMinesCells = [];
     gGame.isOn = false;
     totalSeconds = 0;
-    init()  
+    gGame.markedCount = 0;
+    gGame.shownCount = 0;
+    var elText = document.querySelector('h1.result span');
+    elText.innerText = ' ';
+    gSmiley.innerText = SMILEY;
+    init();
 }
 
 
@@ -75,23 +83,21 @@ function renderBoard() {
         var row = gBoard[i];
         strHtml += '<tr>';
         for (var j = 0; j < row.length; j++) {
-            // figure class name
             var className = (gBoard[i][j].isMine) ? 'mine' : 'safe';
             var cell = (className === 'mine') ? BOMB : '';
             var tdId = `cell-${i}-${j}`;
-            strHtml += `<td id="${tdId}" data-i="${i}" data-j="${j}"class="${className}" onclick="cellClicked(this, ${i},${j})" onmousedown="cellMouseDown(e,this, ${i},${j})">
+            strHtml += `<td id="${tdId}" data-i="${i}" data-j="${j}"class="${className}" onclick="cellClicked(this, ${i},${j})" oncontextmenu="myFunction(this, ${i},${j})">
             ${cell}  </td>`
         }
         strHtml += '</tr>';
     }
     var elMat = document.querySelector('.board');
     elMat.innerHTML = strHtml;
-
 }
 
 
 
-// render new Ball to the board
+
 function addMines(i, j) {
     var counter = 0;
     while (counter < gLevel.MINES) {
@@ -104,28 +110,24 @@ function addMines(i, j) {
             gBoard[cellI][cellJ].isMine = true;
             //DOM
             var elCell = document.querySelector((`[data-i="${cellI}"][data-j="${cellJ}"]`));
-            elCell.innerText = ''
+            elCell.innerText = '';
         }
     }
 }
 
 
 
-
 function cellClicked(elCell, i, j) {
     if (!gGame.isOn) {
+        gTimer = setInterval(timer, 1000);
         gGame.isOn = true;
         addMines(i, j);
-        gTimer = setInterval(timer, 1000);
+        gSmiley.innerText = (SMILEY);
     }
+    sumForVictory(i, j)
     var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`);
-    console.log('elCell', elCell);
-    gBoard[i][j].isShown = true;
-    gBoard[i][j].isMarked = true;
-    console.log('cellData', i, j);
+    setMinesNegsCount(i, j);
     if (!gBoard[i][j].isMine) {
-        gGame.isShown++
-        setMinesNegsCount(i, j);
         renderCell(i, j, gBoard[i][j].minesAroundCount);
     }
     else {
@@ -147,24 +149,14 @@ function setMinesNegsCount(iIdx, jIdx) {
             }
         }
     }
-    console.log('gBoard', gBoard);
-    console.log('minesAroundCount', minesAroundCount);
     gBoard[iIdx][jIdx].minesAroundCount = minesAroundCount;
 }
-
-
 
 
 function renderCell(i, j, value) {
     var elCell = document.querySelector(`[data-i="${i}"][data-j="${j}"]`)
     elCell.innerHTML = value;
 }
-function gameOver() {
-    clearInterval(gTimer)
-    document.querySelector('h1.over').style.display = 'block'
-
-}
-
 
 function renderAllMines(i, j) {
     for (var idx = 0; idx < gMinesCells.length; idx++) {
@@ -174,7 +166,7 @@ function renderAllMines(i, j) {
     elMineSelected.style.backgroundColor = 'red';
 }
 
-function timer(){
+function timer() {
     ++totalSeconds;
     var hour = Math.floor(totalSeconds / 3600);
     var minute = Math.floor((totalSeconds - hour * 3600) / 60);
@@ -186,51 +178,70 @@ function timer(){
     document.getElementById("timer").innerHTML = minute + ":" + seconds;
 }
 
+/////////////////////////////////////////MOUSE CLICKS
 
-// btn.addEventListener('contextmenu', (elCellFlag) => {
-//     e.preventDefault();
-// });
-
-// // show the mouse event message
-// btn.addEventListener('mouseup', (e) => {
-//     let msg = document.querySelector('#message');
-//     switch (e.button) {{
-//         case 2:
-//             msg.textContent = FLAG;
-//             break;
-      
-//     }
-// });
-
-
-// function cellMarked(elCellFlag){
-// var elCellFlag = document.getElementById('#right-click');
-// console.log('elCellFlag',elCellFlag);
-
-// var rightMouseClicked = false;
-
-// function cellMarked(elCellFlag) {
-//   //elCellFlag.button describes the mouse button that was clicked
-//   // 0 is left, 1 is middle, 2 is right
-//   if (elCellFlag.button === 2) {
-//     rightMouseClicked = true;
-//   } else if (elCellFlag.button === 0) {  
-// cellClicked()
-//     if (rightMouseClicked) {
-//       console.log('hello');
-//       //code
-//     }
-//   }
-//   console.log(rightMouseClicked);
-// }
-
-function cellMouseDown(e) {
-    console.log({e});
-  if (e.button === 2) {
-    rightMouseClicked = false;
-    console.log({rightMouseClicked,i,j});
-  }
+function myFunction(elCell, i, j) {
+    if  (!gGame.isOn){
+        gTimer = setInterval(timer, 1000);
+        gGame.isOn = true;
+        addMines(i, j);
+    }
+    var cellI = i
+    var cellJ = j
+    renderCell(i, j, FLAG)
+    sumForVictory(i, j);
+    gBoard[cellI][cellJ].isMarked = true
+    }
+document.oncontextmenu = function () {
+    return false;
 }
 
-// document.addEventListener('mousedown', handleMouseDown);
+
+var sumClickedCell = 0
+
+function onmouseup(i, j) {
+    if (window.event.which == 1) {//code for left click
+        if (!gBoard[i][j].isShown && (!gBoard[i][j].isMarked)) {
+            gBoard[i][j].isShown = true;
+            gGame.shownCount++
+        }
+    }
+    else if (window.event.which == 3) {//code for right click
+        if (!gBoard[i][j].isMarked&& (!gBoard[i][j].isShown)){
+            gGame.markedCount++
+        }
+    }
+    sumClickedCell = gGame.shownCount + gGame.markedCount;
+    return sumClickedCell;
+}
+
+
+/////////////////////////////////////////////////////////
+function gameOver() {
+    clearInterval(gTimer);
+    gSmiley.innerText = (SAD);
+    var elText = document.querySelector('h1.result span')
+    elText.innerText = 'GAME OVER 💣';
+    // document.querySelector('table').setAttribute('disabled', true);
+
+}
+
+
+
+function sumForVictory(i, j) {
+    var sum = onmouseup(i, j);
+    if (sum === gLevel.SIZE * gLevel.SIZE) {
+        victory()
+    }
+}
+
+
+function victory() {
+    clearInterval(gTimer);
+    gSmiley.innerText = (WINNER);
+   var elText = document.querySelector('h1.result span');
+   elText.innerText = 'victory 👑';
+   gElBtn.disable = true;
+}
+
 

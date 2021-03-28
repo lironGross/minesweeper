@@ -1,11 +1,22 @@
 body {
+    padding-top: 20px;
     background-color: rgb(243, 250, 215);
     font-family:'Lucida Sans';
-    margin: auto;
+    text-align: center;
 }
 
-.table {
-    display: table;
+table{
+text-align: center;
+margin-left: auto;
+margin-right: auto;
+}
+
+table td:hover{
+    background-color: cornflowerblue;
+}
+
+h1 {
+    color: rgb(152, 178, 235);
 }
 
 .board {
@@ -14,13 +25,15 @@ body {
     background-color: gray;
 }
 
-.board td {
+.board td{
     width: 50px;
     height:50px;
     text-align: center;
+    border-radius: 5px;
 }
 
-h1.over{
+
+h1.victory {
     display: none;
 }
 
@@ -29,4 +42,12 @@ h1.over{
     border-radius: 5px;
     margin-bottom: 20px;
     margin-left: 10px;
+    display: block;
+}
+
+.level .buttons {
+    padding: 5px;
+    margin-right: 10px;
+    background-color: rgb(173, 194, 235);
+    font-family:fantasy;
 }
